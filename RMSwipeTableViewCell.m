@@ -199,7 +199,20 @@
 
 -(UIView*)backView {
     if (!_backView) {
-        _backView = [[UIView alloc] initWithFrame:self.contentView.bounds];
+        
+        CGRect backViewFrame = self.contentView.bounds;
+        
+        // If we are only revealing one direction, make sure the cell doesn't flicker any
+        // color on the opposite side if it bounces closed.
+        if (self.revealDirection == RMSwipeTableViewCellRevealDirectionRight) {
+            backViewFrame.origin.x = 10;
+            backViewFrame.size.width -= 10;
+        }
+        else if (self.revealDirection == RMSwipeTableViewCellRevealDirectionLeft) {
+            backViewFrame.size.width -= 10;
+        }
+        
+        _backView = [[UIView alloc] initWithFrame:backViewFrame];
         _backView.backgroundColor = self.backViewbackgroundColor;
     }
     return _backView;
